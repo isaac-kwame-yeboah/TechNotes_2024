@@ -7,6 +7,9 @@ const path = require("path");
 // Bring in dotenv //
 const dotenv = require("dotenv").config(); 
 
+// Bring in connectDB file //
+const connectDB = require("./config/db.js");
+ 
 // Bring in colors //
 const colors = require("colors"); 
 
@@ -29,26 +32,33 @@ const errorHandler = require("./middleware/errorHandler.js")
 // Initialize express app //
 const app = express();
 
-// use logger middleware // 
+// Use logger middleware // 
 app.use(logger);
 
-// use cors // 
+// Use cors // 
 app.use(cors(corsOptions)); 
 
+// Connect to database //
+connectDB();
 
 
 // Form Body Parser Middleware //
 app.use(express.json());  // send raw json //
 app.use(express.urlencoded({ extended:true }));  // URL encoded //
 
-// use cookie parser middleware //
+// Use cookie parser middleware //
 app.use(cookieParser());
 
   // Set Static Folder //
 app.use("/", express.static(path.join(__dirname, "public"))); 
 
 // Home || Root Route //
-app.use("/", require("./routes/root"));
+app.use("/", require("./routes/root")); 
+
+//  Users API Route // 
+app.use("/api/users", require("./routes/userRoutes")); 
+
+
 
 // 404 Page Route // 
 app.all("*", (req, res) => {
@@ -60,7 +70,7 @@ app.all("*", (req, res) => {
     } else {
         res.type("txt").send("404 Not Fouund");
     }
-})
+}) 
 
 
 // Use errorHandler middleware //

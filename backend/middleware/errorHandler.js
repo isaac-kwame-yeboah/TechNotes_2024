@@ -1,11 +1,11 @@
  // Custom errorHandler //  
 
 // Bring in logEvents // 
-const { logEvent } = require("./logger.js"); 
+const { logEvents } = require("./logger.js"); 
 
 
 // errorHandler // 
-const errorHandler = (err, req, rex, next) => {
+const errorHandler = (err, req, res, next) => {
     logEvents(`${err.name}: ${err.message}\t${req.method}\t${req.url}\t${req.headers.origin}`, 'errLog.log')
      console.log(err.stack)
 
